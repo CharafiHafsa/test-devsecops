@@ -176,7 +176,7 @@ jobs:
         exit 0
         fi
 
-        npm ci
+        npm install
         npm test
 
 
@@ -193,7 +193,7 @@ jobs:
         exit 0
         fi
 
-        npm ci
+        npm install
         npm test
 
 

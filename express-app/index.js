@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
 });
 
 module.exports = app;
-
+console.log("test");
 if (require.main === module) {
   app.listen(port, () => {
     // nosemgrep: no-console-log
