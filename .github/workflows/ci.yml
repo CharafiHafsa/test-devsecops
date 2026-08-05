@@ -162,21 +162,35 @@ jobs:
     - name: Run Next.js Security Tests
       working-directory: next-app
       run: |
-        if npm run | grep -q "test"; then
-        npm test
-        else
-        echo "No Next.js test suite configured"
+        if [ ! -f package.json ]; then
+        echo "No package.json found"
+        exit 0
         fi
+
+        if ! npm run | grep -q "test"; then
+        echo "No test script configured"
+        exit 0
+        fi
+
+        npm ci
+        npm test
 
 
     - name: Run Express Security Tests
       working-directory: express-app
       run: |
-        if npm run | grep -q "test"; then
-        npm test
-        else
-        echo "No Express test suite configured"
+        if [ ! -f package.json ]; then
+        echo "No package.json found"
+        exit 0
         fi
+
+        if ! npm run | grep -q "test"; then
+        echo "No test script configured"
+        exit 0
+        fi
+
+        npm ci
+        npm test
 
 
 
