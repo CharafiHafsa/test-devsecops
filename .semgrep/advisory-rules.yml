@@ -1,0 +1,10 @@
+rules:
+
+  - id: no-console-log
+    pattern: console.log(...)
+    message: |
+      Les console.log devraient être supprimés en production.
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING

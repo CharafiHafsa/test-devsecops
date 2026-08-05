@@ -40,8 +40,14 @@ jobs:
       - name: Semgrep - Custom Rules (Blocking)
         run: |
             semgrep scan \
-            --config .semgrep/custom-rules.yml \
+            --config .semgrep/blocking-rules.yml \
             --error
+
+      - name: Semgrep - Code Quality Rules (Report Only)
+        run: |
+            semgrep scan \
+            --config .semgrep/advisory-rules.yml \
+            --no-error
 
       - name: Semgrep - OWASP Rules (Report Only)
         run: |

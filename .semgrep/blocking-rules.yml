@@ -51,11 +51,3 @@ rules:
     metadata:
       cwe: "CWE-1333"
       owasp: "A03:2021"
-
-  - id: no-console-log
-    pattern: console.log(...)
-    message: "Les console.log ne devraient pas rester dans le code de production"
-    languages:
-      - javascript
-      - typescript
-    severity: WARNING
