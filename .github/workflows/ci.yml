@@ -1,0 +1,46 @@
+name: Pipeline DevSecOps
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  security-checks:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Récupérer le code source
+      - name: Checkout du code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # nécessaire pour Gitleaks (scan de tout l'historique)
+
+      # 2. Gitleaks – détection de secrets dans le code et l'historique Git
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        # La variable d'environnement n'est pas obligatoire pour un dépôt public
+        # env:
+        #   GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+      # 3. Semgrep – analyse statique avec règles customs + règles de base
+      - name: Semgrep
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/default
+            .semgrep/custom-rules.yml
+
+      # 4. Hadolint sur le Dockerfile de l'application Next.js
+      - name: Hadolint Next.js
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: next-app/Dockerfile
+          failure-threshold: warning
+
+      # 5. Hadolint sur le Dockerfile de l'application Express
+      - name: Hadolint Express
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: express-app/Dockerfile
+          failure-threshold: warning
