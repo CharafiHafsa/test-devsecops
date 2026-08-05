@@ -27,27 +27,38 @@ jobs:
         #   GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
       # 3. Semgrep – analyse statique avec règles customs + règles de base
-      # ------------------------------------------------------------------
-      # Semgrep - Custom Security Rules (Blocking)
-      # ------------------------------------------------------------------
-      - name: Semgrep - Custom Rules
-        uses: semgrep/semgrep-action@v1
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          config: .semgrep/custom-rules.yml
+            python-version: "3.12"
 
-    # ------------------------------------------------------------------
-    # Semgrep - Official Rules (Non Blocking)
-    # ------------------------------------------------------------------
-      - name: Semgrep - OWASP Rules
-        uses: semgrep/semgrep-action@v1
-        continue-on-error: true
+      - name: Install Semgrep
+        run: |
+            python -m pip install --upgrade pip
+            pip install semgrep
+
+      - name: Semgrep - Custom Rules (Blocking)
+        run: |
+            semgrep scan \
+            --config .semgrep/custom-rules.yml \
+            --error
+
+      - name: Semgrep - OWASP Rules (Report Only)
+        run: |
+            semgrep scan \
+            --config p/owasp-top-ten \
+            --config p/javascript \
+            --config p/typescript \
+            --config p/nodejs \
+            --config p/react \
+            --sarif \
+            --output semgrep.sarif \
+            --no-error
+
+      - name: Upload Semgrep SARIF
+        uses: github/codeql-action/upload-sarif@v3
         with:
-           config: |
-            p/owasp-top-ten
-            p/javascript
-            p/typescript
-            p/nodejs
-            p/react
+            sarif_file: semgrep.sarif
 
       # 4. Hadolint sur le Dockerfile de l'application Next.js
       - name: Hadolint Next.js
