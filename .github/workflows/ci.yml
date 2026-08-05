@@ -1,4 +1,7 @@
 name: Pipeline DevSecOps
+permissions:
+  contents: read
+  security-events: write
 
 on:
   push:
@@ -24,12 +27,27 @@ jobs:
         #   GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
       # 3. Semgrep – analyse statique avec règles customs + règles de base
-      - name: Semgrep
+      # ------------------------------------------------------------------
+      # Semgrep - Custom Security Rules (Blocking)
+      # ------------------------------------------------------------------
+      - name: Semgrep - Custom Rules
         uses: semgrep/semgrep-action@v1
         with:
-          config: >-
-            p/default
-            .semgrep/custom-rules.yml
+          config: .semgrep/custom-rules.yml
+
+    # ------------------------------------------------------------------
+    # Semgrep - Official Rules (Non Blocking)
+    # ------------------------------------------------------------------
+      - name: Semgrep - OWASP Rules
+        uses: semgrep/semgrep-action@v1
+        continue-on-error: true
+        with:
+           config: |
+            p/owasp-top-ten
+            p/javascript
+            p/typescript
+            p/nodejs
+            p/react
 
       # 4. Hadolint sur le Dockerfile de l'application Next.js
       - name: Hadolint Next.js

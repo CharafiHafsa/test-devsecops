@@ -1,4 +1,57 @@
 rules:
+  # ------------------------------------------------------------------
+  # A-09 & A-14 : handler sans getServerSession()
+  # ------------------------------------------------------------------
+  - id: missing-get-server-session
+    patterns:
+      - pattern: |
+          export async function $FUNC(...) {
+            ...
+          }
+      - pattern-not: |
+          export async function $FUNC(...) {
+            ...
+            const session = await getServerSession(...);
+            ...
+          }
+    message: |
+      Ce handler d'API ne semble pas appeler getServerSession().
+      Un endpoint sans vérification de session est vulnérable (A-09, A-14).
+    languages:
+      - typescript
+      - javascript
+    severity: ERROR
+    paths:
+      include:
+        - "**/api/**"
+    metadata:
+      cwe: "CWE-306"
+      owasp: "A01:2021"
+
+  # ------------------------------------------------------------------
+  # A-19 : ReDoS – variable non échappée dans un $regex
+  # ------------------------------------------------------------------
+  - id: unescaped-regex-param
+    patterns:
+      - pattern-either:
+          - pattern: |
+              { $regex: $VAR, ... }
+          - pattern: |
+              { $regex: new RegExp($VAR), ... }
+      - metavariable-regex:
+          metavariable: $VAR
+          regex: "^(?!.*escape-string-regexp).*"
+    message: |
+      Utilisation d'un paramètre utilisateur non échappé dans un $regex MongoDB.
+      Cela peut provoquer un ReDoS (A-19). Utilisez la fonction escape-string-regexp.
+    languages:
+      - typescript
+      - javascript
+    severity: ERROR
+    metadata:
+      cwe: "CWE-1333"
+      owasp: "A03:2021"
+
   - id: no-console-log
     pattern: console.log(...)
     message: "Les console.log ne devraient pas rester dans le code de production"
