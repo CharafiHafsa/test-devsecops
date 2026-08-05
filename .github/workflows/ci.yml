@@ -75,7 +75,6 @@ jobs:
         semgrep scan \
           --config .semgrep/blocking-rules.yml \
           --severity ERROR \
-          --output semgrep-blocking.sarif \
           --error
 
 
@@ -95,7 +94,6 @@ jobs:
           --config p/typescript \
           --config p/nodejs \
           --config p/react \
-          --output semgrep-owasp.sarif \
           --no-error
 
 
@@ -110,7 +108,6 @@ jobs:
 
         semgrep scan \
           --config .semgrep/advisory-rules.yml \
-          --output semgrep-quality.sarif \
           --no-error
 
 
