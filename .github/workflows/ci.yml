@@ -115,21 +115,25 @@ jobs:
     # 8. Dependency Security
     # --------------------------------------------------------
 
+    - name: Install Next.js dependencies
+      working-directory: next-app
+      run: npm ci
+
+    - name: Install Express dependencies
+      working-directory: express-app
+      run: npm ci
+
+
+
     - name: NPM Audit - Next.js
       working-directory: next-app
-      run: |
-
-        npm ci
-        npm audit --audit-level=high
+      run: npm audit --audit-level=high
 
 
 
     - name: NPM Audit - Express
       working-directory: express-app
-      run: |
-
-        npm ci
-        npm audit --audit-level=high
+      run:  npm audit --audit-level=high
 
 
 
