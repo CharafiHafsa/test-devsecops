@@ -75,7 +75,6 @@ jobs:
         semgrep scan \
           --config .semgrep/blocking-rules.yml \
           --severity ERROR \
-          --sarif \
           --output semgrep-blocking.sarif \
           --error
 
@@ -96,7 +95,6 @@ jobs:
           --config p/typescript \
           --config p/nodejs \
           --config p/react \
-          --sarif \
           --output semgrep-owasp.sarif \
           --no-error
 
@@ -112,38 +110,8 @@ jobs:
 
         semgrep scan \
           --config .semgrep/advisory-rules.yml \
-          --sarif \
           --output semgrep-quality.sarif \
           --no-error
-
-
-
-    # --------------------------------------------------------
-    # 7. Upload Semgrep Reports
-    # --------------------------------------------------------
-
-    - name: Upload Semgrep Blocking Results
-      if: always()
-      uses: github/codeql-action/upload-sarif@v4
-      with:
-        sarif_file: semgrep-blocking.sarif
-
-
-
-    - name: Upload Semgrep OWASP Results
-      if: always()
-      uses: github/codeql-action/upload-sarif@v4
-      with:
-        sarif_file: semgrep-owasp.sarif
-
-
-
-    - name: Upload Semgrep Quality Results
-      if: always()
-      uses: github/codeql-action/upload-sarif@v4
-      with:
-        sarif_file: semgrep-quality.sarif
-
 
 
     # --------------------------------------------------------
