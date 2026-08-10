@@ -117,11 +117,11 @@ jobs:
 
     - name: Install Next.js dependencies
       working-directory: next-app
-      run: npm install
+      run: npm ci
 
     - name: Install Express dependencies
       working-directory: express-app
-      run: npm install
+      run: npm ci
 
 
 
@@ -176,7 +176,6 @@ jobs:
         exit 0
         fi
 
-        npm install
         npm test
 
 
@@ -192,8 +191,7 @@ jobs:
         echo "No test script configured"
         exit 0
         fi
-
-        npm install
+        
         npm test
 
 
