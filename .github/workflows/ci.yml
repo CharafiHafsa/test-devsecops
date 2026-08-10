@@ -216,7 +216,7 @@ jobs:
 
     - name: Build Next.js Application
       working-directory: next-app
-      run:   run: |
+      run: |
         echo "=== Next.js production build ==="
         echo "Working directory: $(pwd)"
         echo "Node: $(node --version)"
