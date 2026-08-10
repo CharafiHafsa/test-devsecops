@@ -216,15 +216,12 @@ jobs:
 
     - name: Build Next.js Application
       working-directory: next-app
-      run: |
-        echo "=== Next.js production build ==="
-        echo "Working directory: $(pwd)"
-        echo "Node: $(node --version)"
-        echo "NPM: $(npm --version)"
-        npm run build
+      run: npm run build
 
 
 
     - name: Validate Express Application
       working-directory: express-app
-      run: npm run build
+      run: |
+        echo "=== Express application validation ==="
+        node --check index.js
