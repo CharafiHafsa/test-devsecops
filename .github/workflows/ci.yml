@@ -202,14 +202,10 @@ jobs:
 
     - name: Build Next.js Application
       working-directory: next-app
-      run: |
-
-        npm run build
+      run: npm run build
 
 
 
     - name: Validate Express Application
       working-directory: express-app
-      run: |
-
-        npm run build || true
+      run: npm run build
