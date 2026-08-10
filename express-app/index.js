@@ -2,10 +2,8 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Désactiver l'en-tête X-Powered-By
 app.disable('x-powered-by');
 
-// Middleware d'en-têtes de sécurité (A-20)
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
