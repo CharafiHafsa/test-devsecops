@@ -115,6 +115,12 @@ jobs:
     # 8. Dependency Security
     # --------------------------------------------------------
 
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "22.23.1"
+        cache: npm
+
     - name: Install Next.js dependencies
       working-directory: next-app
       run: |
@@ -210,7 +216,12 @@ jobs:
 
     - name: Build Next.js Application
       working-directory: next-app
-      run: npm run build
+      run:   run: |
+        echo "=== Next.js production build ==="
+        echo "Working directory: $(pwd)"
+        echo "Node: $(node --version)"
+        echo "NPM: $(npm --version)"
+        npm run build
 
 
 
